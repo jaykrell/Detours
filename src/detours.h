@@ -16,6 +16,25 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 
+#ifdef DETOURS_INTERNAL
+#if _MSC_VER <= 1200
+#pragma warning(disable:4244) // integer conversion
+#pragma warning(disable:4514) // unused inline function (strsafe.h)
+#define __debugbreak() __asm int 3
+#endif
+#pragma warning(push)
+#pragma warning(disable:4616) // warning out of range (older compilers)
+#pragma warning(disable:4091) // empty typedef
+#define _CRT_STDIO_ARBITRARY_WIDE_SPECIFIERS 1
+#define _ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE 1
+#include <windows.h>
+#include <stddef.h>
+#include <limits.h>
+#pragma warning(disable:6102 6103) // /analyze warnings
+#include <strsafe.h>
+#pragma warning(pop)
+#endif
+
 #undef DETOURS_X64
 #undef DETOURS_X86
 #undef DETOURS_IA64
@@ -233,6 +252,7 @@ typedef ULONG ULONG_PTR;
 
 #ifdef DETOURS_INTERNAL
 
+#pragma warning(disable:4068) // unknown pragma (suppress)
 #pragma warning(disable:4615) // unknown warning type (suppress with older compilers)
 
 #ifndef _Benign_race_begin_
